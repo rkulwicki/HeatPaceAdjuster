@@ -2,4 +2,7 @@
     <string name="app_name">Heat Pace Adjuster</string>
     <string name="baseline_pace">00:00</string>
     <string name="button_adjust">Adjust</string>
+    <string name="button_to_strava">Past Runs</string>
+    <string name="text_goal_pace">Goal Pace</string>
+    <string name="text_adjusted_pace">Adjusted Pace</string>
 </resources>
