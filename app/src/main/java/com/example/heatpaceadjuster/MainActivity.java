@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +16,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //validate editTexts 00:00
+        EditText editGoalPaceText = (EditText) findViewById(R.id.editGoalPace);
+        editGoalPaceText.addTextChangedListener(new TextValidator(editGoalPaceText) {
+            @Override public void validate(TextView textView, String text) {/* Validation code here. Don't need.  */}
+        });
+
+        EditText editAdjustedPace = (EditText) findViewById(R.id.editAdjustedPace);
+        editAdjustedPace.addTextChangedListener(new TextValidator(editAdjustedPace) {
+            @Override public void validate(TextView textView, String text) {/* Validation code here. Don't need. */}
+        });
     }
 
     //todo - rename this, because this is going to be the connection to Strava
