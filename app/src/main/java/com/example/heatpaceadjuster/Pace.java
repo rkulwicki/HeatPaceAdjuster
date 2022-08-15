@@ -24,17 +24,37 @@ public class Pace {
 
     public boolean tryParse(String s){
         int i = s.indexOf(":");
-        if(i != -1){ //found colon - try get two before and two after.
-            if(i != 0) {
-                String beforeColon = s.substring(0, i);
-                String afterColon = s.substring(i+1);
-                //todo - finish
-            }else{
-                //todo - no minutes. ex. :09 or :5
+        try {
+            if (i != -1) { //found colon - try get two before and two after.
+                if (i != 0) { // ex. 09:59
+                    String beforeColon = s.substring(0, i);
+                    String afterColon = s.substring(i + 1);
+                    if (beforeColon.length() > 1 && beforeColon.startsWith("0")) {
+                        beforeColon = beforeColon.substring(1);
+                        this.min = Integer.parseInt(beforeColon);
+                    } else {
+                        this.min = Integer.parseInt(beforeColon);
+                    }
+                    if (afterColon.length() > 1 && afterColon.startsWith("0")) {
+                        afterColon = afterColon.substring(1);
+                        this.sec = Integer.parseInt(afterColon);
+                    } else {
+                        this.sec = Integer.parseInt(afterColon);
+                    }
+                } else { // ex. :50
+                    String afterColon = s.substring(1);
+                    this.sec = Integer.parseInt(afterColon);
+                    this.min = 0;
+                }
+            } else { //ex. 7
+                this.sec = 0;
+                int tempMin = 0;
+                Integer.parseInt(s);
+                if (tempMin > 0 && tempMin < 100)
+                    this.min = tempMin;
             }
-        }
-        else{ //ex. 7
-
+        } catch (Exception e){
+            return false;
         }
         return true;
     }

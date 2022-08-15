@@ -48,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(messageGoalPace.isEmpty())
         {
-            // todo - PaceCalculator convert
+            //todo - PaceCalculator convert
+            // take messageAdjustedPace and try parce it into a Pace object.
+
+
             editGoalPaceText.setText(messageAdjustedPace);
         }else if (messageAdjustedPace.isEmpty())
         {
