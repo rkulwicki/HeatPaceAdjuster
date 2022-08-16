@@ -46,17 +46,34 @@ public class MainActivity extends AppCompatActivity {
         EditText editAdjustedPace = (EditText) findViewById(R.id.editAdjustedPace);
         String messageAdjustedPace = editAdjustedPace.getText().toString();
 
-        if(messageGoalPace.isEmpty())
-        {
-            //todo - PaceCalculator convert
-            // take messageAdjustedPace and try parce it into a Pace object.
+        //todo - get weather.
+        Weather weather = new Weather(70, 70);
 
-
-            editGoalPaceText.setText(messageAdjustedPace);
-        }else if (messageAdjustedPace.isEmpty())
+        if(messageAdjustedPace.length() == 0)
         {
-            // todo - PaceCalculator convert
-            editAdjustedPace.setText(messageGoalPace);
+            Pace goalPace = new Pace();
+            if(goalPace.tryParse(messageGoalPace))
+            {
+                Pace adjustedPace = PaceCalculator.GetAdjustedPaceGivenWeather(goalPace, weather);
+                editAdjustedPace.setText(adjustedPace.toString());
+            }
+            else
+            {
+                editAdjustedPace.setText(messageAdjustedPace);
+            }
+        }
+        else if (messageGoalPace.length() == 0)
+        {
+            Pace adjustedPace = new Pace();
+            if(adjustedPace.tryParse(messageAdjustedPace))
+            {
+                Pace goalPace = PaceCalculator.GetGoalPaceGivenWeather(adjustedPace, weather);
+                editGoalPaceText.setText(goalPace.toString());
+            }
+            else
+            {
+                editGoalPaceText.setText(messageGoalPace);
+            }
         }
     }
 }

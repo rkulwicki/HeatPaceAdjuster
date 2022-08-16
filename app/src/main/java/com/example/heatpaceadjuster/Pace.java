@@ -22,6 +22,7 @@ public class Pace {
         this.units = units;
     }
 
+    //todo - start debugging here. The string coming in is empty
     public boolean tryParse(String s){
         int i = s.indexOf(":");
         try {
@@ -48,8 +49,7 @@ public class Pace {
                 }
             } else { //ex. 7
                 this.sec = 0;
-                int tempMin = 0;
-                Integer.parseInt(s);
+                int tempMin = Integer.parseInt(s);
                 if (tempMin > 0 && tempMin < 100)
                     this.min = tempMin;
             }
@@ -65,7 +65,7 @@ public class Pace {
             time += min + ":";
             if(sec < 10)
                 time += "0";
-            time += sec + ":";
+            time += sec;
         }
         else{
             time += "00:00";
