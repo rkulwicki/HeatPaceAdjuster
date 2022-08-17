@@ -81,7 +81,10 @@ public class WeatherClient {
 
                     // print result
                     System.out.println(response.toString());
-                    //todo - set weather degrees/dewpoint
+                    //todo -
+                    // 1. parse out the response
+                    // 2. determine which time to use (based on location's time zone)
+                    // 3. set weather degrees/dewpoint from that
                 } else {
                     System.out.println("GET request not worked");
                 }
