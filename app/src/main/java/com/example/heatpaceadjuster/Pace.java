@@ -8,13 +8,13 @@ public class Pace {
     public Pace(){
         min = 0;
         sec = 0;
-        units = Units.MIN_PER_MI;
+        units = Units.IMPERIAL;
     }
 
     public Pace(int min, int sec){
         this.min = min;
         this.sec = sec;
-        this.units = Units.MIN_PER_MI;
+        this.units = Units.IMPERIAL;
     }
     public Pace(int min, int sec, Units units){
         this.min = min;
@@ -70,9 +70,9 @@ public class Pace {
         else{
             time += "00:00";
         }
-        if(this.units == Units.MIN_PER_MI)
+        if(this.units == Units.IMPERIAL)
             time += " /mi";
-        else if (this.units == Units.MIN_PER_KM)
+        else if (this.units == Units.METRIC)
             time += " /km";
         return time;
     }

@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public WeatherClient weatherClient;
     private FusedLocationProviderClient fusedLocationClient;
     public Weather currentWeather = null;
+    public Location location = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         //create weather client connection:
         weatherClient = WeatherClient.getInstance();
-        currentWeather = new Weather();
+        currentWeather = new Weather(Units.IMPERIAL);//todo - make this get the current set Units
 
         //add validation:
         EditText editGoalPaceText = (EditText) findViewById(R.id.editGoalPace);
@@ -99,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         EditText editAdjustedPace = (EditText) findViewById(R.id.editAdjustedPace);
         String messageAdjustedPace = editAdjustedPace.getText().toString();
 
-        //todo - get weather.
-        Weather weather = new Weather(70, 70);
+        //todo - use currentWeather which will come from Weather Client
+        Weather weather = new Weather(70, 70, Units.IMPERIAL);
 
         if (messageAdjustedPace.length() == 0) {
             Pace goalPace = new Pace();

@@ -22,7 +22,13 @@ public class PaceCalculator
     private static Pace FormulaToAdjusted(Pace pace, Weather weather)
     {
         Pace adjustedPace = new Pace();
-        final int dp = weather.degreesF + weather.dewpointF;
+        if(pace.units == Units.METRIC){
+            //todo - convert to Miles per minutes
+        }
+        if(weather.GetUnits() == Units.METRIC){
+            //todo - convert weather.degrees and weather.dewpoint to Celcius
+        }
+        final int dp = weather.degrees + weather.dewpoint;
         if(dp < 100)
         {
             return pace;
@@ -46,7 +52,7 @@ public class PaceCalculator
     private static Pace FormulaToGoal(Pace pace, Weather weather)
     {
         Pace goalPace = new Pace();
-        final int dp = weather.degreesF + weather.dewpointF;
+        final int dp = weather.degrees + weather.dewpoint;
         final int a = (pace.min * 60) + pace.sec;
         final float multiple = 1.0964f - (0.00217f * dp) + (0.0000122f * dp * dp);
         if(multiple == 0)
