@@ -7,6 +7,8 @@ public class Weather {
     public int dewpoint;
     public int wind;
     public Location location;
+    public String city;
+    public String state;
     private Units units;
 
     //Note - Units is only set in the constructor to prevent other mismatches in data
@@ -16,6 +18,8 @@ public class Weather {
         this.units = units;
         this.wind = 0;
         this.location = null;
+        this.city = "";
+        this.state = "";
     }
 
     public Weather(int degrees, int dewpoint, Units unit){
