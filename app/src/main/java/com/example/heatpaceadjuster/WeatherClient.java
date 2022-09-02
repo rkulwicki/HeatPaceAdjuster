@@ -1,18 +1,11 @@
 package com.example.heatpaceadjuster;
 
-import android.app.Activity;
-import android.location.Location;
 import android.os.AsyncTask;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,7 +14,6 @@ import java.net.URL;
 public class WeatherClient {
 
     private static WeatherClient singleInstance = null;
-    public Location currentLocation = null;
 
     private WeatherClient()
     {
@@ -80,19 +72,14 @@ public class WeatherClient {
                     // 1. parse out the response
                     // 2. determine which time to use (based on location's time zone)
                     // 3. set weather degrees/dewpoint from that
+
+                    //TODO  - GET THE DEWPOINT, AND ALSO GET THE CORRECT DEGREES.
+                    DSASDFASDF
                     JSONObject jo = new JSONObject(response.toString());
                     JSONArray tempsJA = jo.getJSONObject("hourly").getJSONArray("temperature_2m"); // todo - move this parsing into a separate, more specific class.
                     currentWeather.degrees = (int) Math.round((Double) tempsJA.get(0)); //todo - 0 should be the index that represents the correct current time based on the time zone.
 
-                    main.setCurrentWeather(currentWeather);
-//                    List<Double> list = new ArrayList<Double>();
-//                    for(int i = 0; i < tempsJA.length(); i++){
-//                        list.add(tempsJA.getJSONObject(i).getDouble("temperature_2m"));
-//                    }
-//                    double[] temps = double[] values = Arrays.stream(tempsJA)
-//                                    .mapToDouble(Double::parseDouble)
-//                                    .toArray();
-                    // -------------------------------------------------------
+                    main.displayCurrentWeather(currentWeather);
                 } else {
                     System.out.println("GET request to \""+ GET_URL + "\" did not work.");
                 }

@@ -2,34 +2,23 @@ package com.example.heatpaceadjuster;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     public WeatherClient weatherClient;
     private FusedLocationProviderClient fusedLocationClient;
     public Weather currentWeather = null;
-    public Location location = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,35 +49,22 @@ public class MainActivity extends AppCompatActivity {
             public void validate(TextView textView, String text) {/* Validation code here. Don't need. */}
         });
 
-        //location stuff:
         RequestLocationPermission();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
         MainActivity mainActivityReference = this;
         fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            currentWeather.location = location;
-                            weatherClient.GetCurrentTempAndDewPoint(currentWeather, mainActivityReference);
-                        }
+                .addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        currentWeather.SetLocationAndCityStateAndDayHour(location, mainActivityReference);
+                        weatherClient.GetCurrentTempAndDewPoint(currentWeather, mainActivityReference);
                     }
                 });
-
-//        if(this.currentLocation != null)
-//            weatherClient.GetCurrentTempAndDewPoint(this.currentLocation);
     }
 
     //todo - rename this, because this is going to be the connection to Strava
@@ -158,57 +133,18 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void setCurrentWeather(Weather weather)
+    public void displayCurrentWeather(Weather weather)
     {
-        runOnUiThread(new Runnable() {
+        runOnUiThread(() -> {
+            TextView textView = findViewById(R.id.CurrentTemperature);
+            textView.setText(String.valueOf(weather.degrees));
 
-            @Override
-            public void run() {
-                TextView textView = findViewById(R.id.CurrentTemperature);
-                textView.setText(String.valueOf(weather.degrees));
-
-                if(weather.location != null)
-                {
-                    TextView textViewCityState = findViewById(R.id.CityState);
-                    textViewCityState.setText(String.valueOf(weather.location.getLongitude()) + ", " + String.valueOf(weather.location.getLatitude()));
-
-                    //time.
-//                    Date date = new Date(weather.location.getTime());
-//                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-//                    format.setTimeZone(TimeZone.getTimeZone("CST")); // todo get time zone?
-//                    TextView textViewTime = findViewById(R.id.CurrentDateTime);
-//                    textViewTime.setText(format.format(date));
-
-                    //todo - move this logic into weather
-                    Calendar c = new GregorianCalendar(TimeZone.getTimeZone("CST"));
-                    c.setTimeInMillis(weather.location.getTime());
-                    TextView textViewTime = findViewById(R.id.CurrentDateTime);
-                    String dayOfWeek = "";
-                    switch (c.get(Calendar.DAY_OF_WEEK)) {
-                        case 1:
-                            dayOfWeek = "Monday";
-                            break;
-                        case 2:
-                            dayOfWeek = "Tuesday";
-                            break;
-                        case 3:
-                            dayOfWeek = "Wednesday";
-                            break;
-                        case 4:
-                            dayOfWeek = "Thursday";
-                            break;
-                        case 5:
-                            dayOfWeek = "Friday";
-                            break;
-                        case 6:
-                            dayOfWeek = "Saturday";
-                            break;
-                        case 7:
-                            dayOfWeek = "Sunday";
-                            break;
-                    }
-                    textViewTime.setText(dayOfWeek + " " + c.get(Calendar.HOUR_OF_DAY));
-                }
+            if(weather.location != null)
+            {
+                TextView textViewTime = findViewById(R.id.CurrentDateTime);
+                textViewTime.setText(weather.DayHourToString());
+                TextView textViewCityState = findViewById(R.id.CityState);
+                textViewCityState.setText(weather.CityStateToString());
             }
         });
     }
