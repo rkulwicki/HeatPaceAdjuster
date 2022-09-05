@@ -97,24 +97,51 @@
         app:layout_constraintTop_toTopOf="@+id/CurrentTemperature" />
 
     <TextView
+        android:id="@+id/dewpointUnits"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="°F"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/dewpointText"
+        app:layout_constraintStart_toEndOf="@+id/CurrentDewpoint" />
+
+    <TextView
         android:id="@+id/CityState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="2dp"
         android:text="loading"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="14dp"
+        app:layout_constraintBottom_toTopOf="@+id/CurrentDateTime"
+        app:layout_constraintEnd_toEndOf="@+id/CurrentDateTime" />
 
     <TextView
         android:id="@+id/CurrentDateTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:text=" "
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CityState" />
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@+id/dewpointText"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/CurrentDewpoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="0"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/dewpointText"
+        app:layout_constraintStart_toEndOf="@+id/dewpointText" />
+
+    <TextView
+        android:id="@+id/dewpointText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dewpoint:"
+        app:layout_constraintStart_toStartOf="@+id/CurrentTemperature"
+        app:layout_constraintTop_toBottomOf="@+id/CurrentTemperature" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

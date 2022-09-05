@@ -123,10 +123,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
-        //todo -- ?
-        // Before you perform the actual permission request, check whether your app
-        // already has the permissions, and whether your app needs to show a permission
-        // rationale dialog. For more details, see Request permissions.
+
         locationPermissionRequest.launch(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -136,13 +133,17 @@ public class MainActivity extends AppCompatActivity {
     public void displayCurrentWeather(Weather weather)
     {
         runOnUiThread(() -> {
-            TextView textView = findViewById(R.id.CurrentTemperature);
-            textView.setText(String.valueOf(weather.degrees));
+            TextView textViewDegrees = findViewById(R.id.CurrentTemperature);
+            textViewDegrees.setText(String.valueOf(weather.degrees));
+
+            TextView textViewDewpoint = findViewById(R.id.CurrentDewpoint);
+            textViewDewpoint.setText(String.valueOf(weather.dewpoint));
 
             if(weather.location != null)
             {
                 TextView textViewTime = findViewById(R.id.CurrentDateTime);
                 textViewTime.setText(weather.DayHourToString());
+
                 TextView textViewCityState = findViewById(R.id.CityState);
                 textViewCityState.setText(weather.CityStateToString());
             }

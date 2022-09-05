@@ -68,16 +68,12 @@ public class WeatherClient {
                     }
                     in.close();
 
-                    //todo -
-                    // 1. parse out the response
-                    // 2. determine which time to use (based on location's time zone)
-                    // 3. set weather degrees/dewpoint from that
-
-                    //TODO  - GET THE DEWPOINT, AND ALSO GET THE CORRECT DEGREES.
-                    DSASDFASDF
+                    //TODO  - Get the correct degrees/dewpoint based on the correct hour.
                     JSONObject jo = new JSONObject(response.toString());
-                    JSONArray tempsJA = jo.getJSONObject("hourly").getJSONArray("temperature_2m"); // todo - move this parsing into a separate, more specific class.
-                    currentWeather.degrees = (int) Math.round((Double) tempsJA.get(0)); //todo - 0 should be the index that represents the correct current time based on the time zone.
+                    JSONArray temperature2m = jo.getJSONObject("hourly").getJSONArray("temperature_2m"); // todo - move this parsing into a separate, more specific class.
+                    JSONArray dewpoint2m = jo.getJSONObject("hourly").getJSONArray("dewpoint_2m"); // todo - move this parsing into a separate, more specific class.
+                    currentWeather.degrees = (int) Math.round((Double) temperature2m.get(0)); //todo - 0 should be the index that represents the correct current time based on the time zone.
+                    currentWeather.dewpoint = (int) Math.round((Double) dewpoint2m.get(0)); //todo - 0 should be the index that represents the correct current time based on the time zone.
 
                     main.displayCurrentWeather(currentWeather);
                 } else {
