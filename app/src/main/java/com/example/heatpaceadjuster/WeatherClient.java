@@ -52,9 +52,9 @@ public class WeatherClient {
                 url = new URL("https://api.open-meteo.com/v1/forecast?latitude="+
                         String.valueOf(roundedLat)+"&longitude="+
                         String.valueOf(roundedLong)+
-                        "&hourly=temperature_2m,dewpoint_2m&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch");
+                        "&hourly=temperature_2m,dewpoint_2m&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch"+
+                        "&timezone="+currentWeather.timezone);
                 urlConnection = (HttpURLConnection) url.openConnection();
-                //todo - timezone is in GMT+0. use current location to get the correct temp.
 
                 int responseCode = urlConnection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) { // success
@@ -68,12 +68,13 @@ public class WeatherClient {
                     }
                     in.close();
 
-                    //TODO  - Get the correct degrees/dewpoint based on the correct hour.
+                    // The API response I get starts on the current day's 0 hour (given the timezone). Therefore I
+                    // use currentWeather.hour to get the current hourly temperature
                     JSONObject jo = new JSONObject(response.toString());
                     JSONArray temperature2m = jo.getJSONObject("hourly").getJSONArray("temperature_2m"); // todo - move this parsing into a separate, more specific class.
                     JSONArray dewpoint2m = jo.getJSONObject("hourly").getJSONArray("dewpoint_2m"); // todo - move this parsing into a separate, more specific class.
-                    currentWeather.degrees = (int) Math.round((Double) temperature2m.get(0)); //todo - 0 should be the index that represents the correct current time based on the time zone.
-                    currentWeather.dewpoint = (int) Math.round((Double) dewpoint2m.get(0)); //todo - 0 should be the index that represents the correct current time based on the time zone.
+                    currentWeather.degrees = (int) Math.round((Double) temperature2m.get(currentWeather.hour));
+                    currentWeather.dewpoint = (int) Math.round((Double) dewpoint2m.get(currentWeather.hour));
 
                     main.displayCurrentWeather(currentWeather);
                 } else {

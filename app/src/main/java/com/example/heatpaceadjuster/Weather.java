@@ -24,6 +24,7 @@ public class Weather{
     public int hour;
     public String dayOfWeek;
     private Units units;
+    public String timezone;
 
     //Note - Units is only set in the constructor to prevent other mismatches in data
     public Weather(Units units){
@@ -73,7 +74,7 @@ public class Weather{
         return this.dayOfWeek + " " + this.hour + ":00 AM";
     }
 
-    public void SetLocationAndCityStateAndDayHour(Location location, Context context)
+    public void InitializeWeather(Location location, Context context)
     {
         if(location == null)
             return;
@@ -122,7 +123,19 @@ public class Weather{
         }
         this.dayOfWeek = dayOfWeek;
         this.hour = c.get(Calendar.HOUR_OF_DAY);
-        //dayOfWeek + " " + c.get(Calendar.HOUR_OF_DAY)
+
+        //get timezone
+        try{
+            TimeZoneMap map = TimeZoneMap.forRegion(this.location.getLatitude() - 1,
+                    this.location.getLongitude() - 1,
+                    this.location.getLatitude() + 1,
+                    this.location.getLongitude() + 1);
+            String place = map.getOverlappingTimeZone(this.location.getLatitude(), this.location.getLongitude()).getZoneId();
+            TimeZone t = TimeZone.getTimeZone(place);
+            this.timezone = t.getID();
+        }catch (Exception e){
+            //TODO - add logging?
+        }
     }
 
     public void SetLocation(Location location)

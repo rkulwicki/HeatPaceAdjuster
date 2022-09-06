@@ -17,9 +17,6 @@ import android.widget.TextView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.example.heatpaceadjuster.MESSAGE";
@@ -61,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, location -> {
                     if (location != null) {
-                        currentWeather.SetLocationAndCityStateAndDayHour(location, mainActivityReference);
+                        currentWeather.InitializeWeather(location, mainActivityReference);
                         weatherClient.GetCurrentTempAndDewPoint(currentWeather, mainActivityReference);
                     }
                 });
@@ -84,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
         EditText editAdjustedPace = (EditText) findViewById(R.id.editAdjustedPace);
         String messageAdjustedPace = editAdjustedPace.getText().toString();
 
-        //todo - use currentWeather which will come from Weather Client
-        Weather weather = new Weather(70, 70, Units.IMPERIAL);
+        if(currentWeather == null)
+            return; //todo - add more robust logic if we haven't loaded the current weather yet.
 
         if (messageAdjustedPace.length() == 0) {
             Pace goalPace = new Pace();
             if (goalPace.tryParse(messageGoalPace)) {
-                Pace adjustedPace = PaceCalculator.GetAdjustedPaceGivenWeather(goalPace, weather);
+                Pace adjustedPace = PaceCalculator.GetAdjustedPaceGivenWeather(goalPace, currentWeather);
                 editAdjustedPace.setText(adjustedPace.toString());
             } else {
                 editAdjustedPace.setText(messageAdjustedPace);
@@ -98,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (messageGoalPace.length() == 0) {
             Pace adjustedPace = new Pace();
             if (adjustedPace.tryParse(messageAdjustedPace)) {
-                Pace goalPace = PaceCalculator.GetGoalPaceGivenWeather(adjustedPace, weather);
+                Pace goalPace = PaceCalculator.GetGoalPaceGivenWeather(adjustedPace, currentWeather);
                 editGoalPaceText.setText(goalPace.toString());
             } else {
                 editGoalPaceText.setText(messageGoalPace);
