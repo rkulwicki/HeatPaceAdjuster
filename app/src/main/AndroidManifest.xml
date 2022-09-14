@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HeatPaceAdjuster">
         <activity
-                android:name=".DisplayAdjustedPaceActivity"
+                android:name=".DisplayStravaActivity"
                 android:parentActivityName=".MainActivity">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data

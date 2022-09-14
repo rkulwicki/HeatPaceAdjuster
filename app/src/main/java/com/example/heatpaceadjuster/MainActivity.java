@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -64,14 +65,38 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    public void AuthorizeStrava(View view)
+    {
+        Uri intentUri = Uri.parse("https://www.strava.com/oauth/mobile/authorize")
+                .buildUpon()
+                .appendQueryParameter("client_id", "90891")
+                .appendQueryParameter("redirect_uri", "http://localhost") //todo - change this.
+                HERE
+                .appendQueryParameter("response_type", "code")
+                .appendQueryParameter("approval_prompt", "auto")
+                .appendQueryParameter("scope", "activity:write,read")
+                .build();
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
+    }
+
     //todo - rename this, because this is going to be the connection to Strava
-    public void sendAdjustPace(View view) {
+    public void sendStravaConnection(View view) {
         //todo - display a calculated pace from the entered pace
-        Intent intent = new Intent(this, DisplayAdjustedPaceActivity.class);
+
+
+        //initialize connection with
+
+
+
+        Intent stravaIntent = new Intent(this, DisplayStravaActivity.class);
         EditText editText = (EditText) findViewById(R.id.editGoalPace);
         String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        stravaIntent.putExtra(EXTRA_MESSAGE, message);
+
+        //this is really the only thing I need.
+        startActivity(stravaIntent);
     }
 
     public void sendCurrentAdjustPace(View view) {
